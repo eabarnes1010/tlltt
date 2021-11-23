@@ -6,10 +6,9 @@
 
 *.nc
 *.mat
-
 *.bz2
 #*.csv
-#*.h5
+*.h5
 #*.json
 
 checkpoints/
