@@ -13,8 +13,8 @@
 #*.json
 
 checkpoints/
-#figures/
-#saved_models/
+figures/
+saved_models/
 
 # Apple stuff
 .DS_Store
