@@ -39,7 +39,7 @@ def get_settings(exp_name):
                         'cut_lr_stage'        : 6,   
                         'min_lr'              : 1.e-20,                              
                         'batch_size'          : 32,
-                        'random_seed'         : 30,
+                        'random_seed'         : 88,
                         'batch_size_predict'  : 1_024, 
                         'patience'            : 5,
                 
@@ -54,8 +54,8 @@ def get_settings(exp_name):
                         'drop_rate'           : 0.0,
                         'drop_rate_final'     : .4,
                
-                        'analyze_stage'      : 5,               
-                       },    
+                        'analyze_stage'      : 9,               
+                       },         
            'mjo': {
                         'data_name'           : 'mjo',
                         'data_dir'            : './data/',         
