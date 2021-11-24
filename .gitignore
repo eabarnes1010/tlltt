@@ -12,7 +12,7 @@
 #*.json
 
 checkpoints/
-figures/
+#figures/
 saved_models/
 
 # Apple stuff
