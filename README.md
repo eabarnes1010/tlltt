@@ -25,13 +25,14 @@ The ProtoLNet follows the architecture of the ProtoPNet of Chen et al. (2019) ex
 <figure>
     <img src='figures/quadrants/vizualization/quadrants_composites_examples_of_classes.png' alt='example use case'
          title='Idealized quadrant use case.' width=600>
-    <figcaption>Figure 2: Class composites and example samples for the idealized quadrants use case.  (a-c)Composites of all samples by class label, and (d-f) one example sample for each class.</figcaption>
+    <figcaption>Figure 2: Class composites and example samples for the idealized quadrants use case. (a-c)Composites of all samples by class label, and (d-f) one example sample for each class.</figcaption>
 </figure>  
+
 
 <figure>
     <img src='figures/quadrants/vizualization/quadrants_samples_prototypes.png' alt='prototypes for example use case'
          title='Prototypes and testing samples for the example use case.' width=400>
-    <figcaption>Figure 3: Three example predictions by the network for the idealized quadrants use case, along with the two winning prototypes for each sample and the associated location scaling grid. </figcaption>
+    <figcaption>Figure 3: Three example predictions by the network for the idealized quadrants use case, along with the two winning prototypes for each sample and the associated location scaling grid.</figcaption>
 </figure>  
 
 
