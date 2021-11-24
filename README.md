@@ -24,7 +24,7 @@ The ProtoLNet follows the architecture of the ProtoPNet of Chen et al. (2019) ex
 ## Example use case
 <figure>
     <img src='figures/quadrants/vizualization/quadrants_composites_examples_of_classes.png' alt='example use case'
-         title='Idealized quadrant use case.' width=800>
+         title='Idealized quadrant use case.' width=600>
     <figcaption>Figure 2: Class composites and example samples for the idealized quadrants use case.  (a-c)Composites of all samples by class label, and (d-f) one example sample for each class.</figcaption>
 </figure>  
 
@@ -54,13 +54,13 @@ The following python environment was used to implement this code.
 ```
 
 ### Credits
-This work is a collaborative effort between [Dr. Elizabeth A. Barnes](https://sites.google.com/rams.colostate.edu/barnesresearchgroup/home) and [Dr. Randal J. Barnes](https://cse.umn.edu/cege/randal-j-barnes). With that said, the ProtoPNet of Chen et al. (2019) is the backbone of this work.
+This work is a collaborative effort between [Dr. Elizabeth A. Barnes](https://sites.google.com/rams.colostate.edu/barnesresearchgroup/home) and [Dr. Randal J. Barnes](https://cse.umn.edu/cege/randal-j-barnes). In addition, [Dr. Zane Martin](https://www.zanekmartin.com/) and [Jamin Rader](https://jaminrader.wordpress.com) also contributed to this research and the associated paper. With that said, the ProtoPNet of Chen et al. (2019) is the backbone of this work.
 
 #### Funding sources
 This work was funded, in part, by the NSF AI Institute for Research on Trustworthy AI in Weather, Climate, and Coastal Oceanography ([AI2ES](https://www.ai2es.org/)).
 
 ### References for the *"This Looks Like That"* ProtoLNet
-* <put preprint here>
+* ADD PREPRINT HERE
 
 ### Fundamental references for this work
 * Chen, Chaofan, Oscar Li, Daniel Tao, Alina Barnett, Cynthia Rudin, and Jonathan K. Su. 2019. “This Looks Like That: Deep Learning for Interpretable Image Recognition.” In Advances in Neural Information Processing Systems, edited by H. Wallach, H. Larochelle, A. Beygelzimer, F. Alché-Buc, E. Fox, and R. Garnett. Vol. 32. Curran Associates, Inc. https://proceedings.neurips.cc/paper/2019/file/adf7ee2dcf142b0e11888e72b43fcb75-Paper.pdf
