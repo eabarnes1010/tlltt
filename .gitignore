@@ -18,7 +18,7 @@ saved_models/
 # Apple stuff
 .DS_Store
 .DS_*
-Icon
+Icon*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

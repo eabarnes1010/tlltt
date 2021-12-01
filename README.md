@@ -55,7 +55,7 @@ The following python environment was used to implement this code.
 ```
 
 ### Credits
-This work is a collaborative effort between [Dr. Elizabeth A. Barnes](https://sites.google.com/rams.colostate.edu/barnesresearchgroup/home) and [Dr. Randal J. Barnes](https://cse.umn.edu/cege/randal-j-barnes). In addition, [Dr. Zane Martin](https://www.zanekmartin.com/) and [Jamin Rader](https://jaminrader.wordpress.com) also contributed to this research and the associated paper. With that said, the ProtoPNet of Chen et al. (2019) is the backbone of this work.
+This work is a collaborative effort between [Dr. Elizabeth A. Barnes](https://sites.google.com/rams.colostate.edu/barnesresearchgroup/home) and [Dr. Randal J. Barnes](https://cse.umn.edu/cege/randal-j-barnes). In addition, [Dr. Zane Martin](https://www.zanekmartin.com/) and [Jamin Rader](https://jaminrader.wordpress.com) contributed to the two use cases and the writing of the scientific article. The ProtoPNet of Chen et al. (2019) is the backbone of this work.
 
 #### Funding sources
 This work was funded, in part, by the NSF AI Institute for Research on Trustworthy AI in Weather, Climate, and Coastal Oceanography ([AI2ES](https://www.ai2es.org/)).
