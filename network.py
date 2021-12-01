@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 
 __author__ = "Randal J Barnes and Elizabeth A. Barnes"
-__version__ = "15 July 2021"
+__version__ = "01 Decmeber 2021"
 
 
 def get_model_prototype_layer(model):
@@ -14,7 +14,6 @@ def get_model_final_conv_layer(model):
 
 def get_model_cnn_only_conv_layer(model):
     return tf.keras.models.Model(model.input,model.layers[-6].output)
-
 
 
 class Prototype(tf.keras.layers.Layer):
@@ -29,21 +28,20 @@ class Prototype(tf.keras.layers.Layer):
         )
         self.proto_class_mask = prototype_class_identity
 
-        self.max_dist = tf.constant(100.*1.*1.*nchannels)#tf.constant(1000.)#tf.constant(1.*1.*nchannels)
+        self.max_dist = tf.constant(100.*1.*1.*nchannels)   #tf.constant(1000.)#tf.constant(1.*1.*nchannels)
         self.coeff_cluster = coeff_cluster
         self.coeff_separation = coeff_separation
-        self.coeff_local_mask_l1 = .00001#.00001
-        
-        
+        self.coeff_local_scale_l1 = .00001  #.00001
         
         self.ONES = tf.constant(1, shape=(1, 1, nchannels, nprototypes), dtype=tf.float32)
         self.EPSILON = tf.constant(1e-4, shape=(1), dtype=tf.float32)
+
         
     def build(self, input_shape):  # Create the state of the layer (weights)
-        local_mask = tf.zeros_initializer()
-        self.local_mask = tf.Variable(
-            initial_value=local_mask(
-                shape=(input_shape[1],input_shape[2],tf.shape(self.prototypes)[-1]),
+        local_scale = tf.zeros_initializer()
+        self.local_scale = tf.Variable(
+            initial_value=local_scale(
+                shape=(input_shape[1], input_shape[2], tf.shape(self.prototypes)[-1]),
                 dtype='float32'),
             trainable=True, #set to False for "maskoff"
         )
@@ -54,6 +52,7 @@ class Prototype(tf.keras.layers.Layer):
         
         Arguments:
             inputs   tf.Tensor(shape = (batch_size, H, W, nchannels))
+            prototypes_of_correct_class    tf.Tensor(shape = (???, ???))
             
         Returns:
             max_similarity_scores   tf.Tensor(shape = (batch_size, nprototypes))
@@ -63,8 +62,9 @@ class Prototype(tf.keras.layers.Layer):
         -- distances           tf.Tensor(shape = (batch_size, H, W, nprototypes))
         -- similarity_scores   tf.Tensor(shape = (batch_size, H, W, nprototypes))
         
-        -- The underlying computation is the L2 norm for the difference of two vectors, 
-           say x and y.  We can write this computation (using MATLAB-like notation) as 
+        -- The underlying computation is the squared L2 norm for the difference of 
+           two vectors, say x and y.  We can write this computation (using 
+           MATLAB-like notation) as 
             
                 (x - y)' * (x - y) = (x' * x) - 2 * (x' * y) + (y' * y)
             
@@ -79,46 +79,42 @@ class Prototype(tf.keras.layers.Layer):
            by very small rounding and truncation errors yielding negative norms.
         
         """
-        
-        local_mask_factor = tf.math.exp(self.local_mask)
+        local_scale_factor = tf.math.exp(self.local_scale)                                        # shape = (H, W, nprototypes) ??
         
         xTx = tf.nn.conv2d(inputs**2, self.ONES,       strides=[1, 1, 1, 1], padding='VALID')     # shape = (batch_size, H, W, nprototypes)
         xTy = tf.nn.conv2d(inputs,    self.prototypes, strides=[1, 1, 1, 1], padding='VALID')     # shape = (batch_size, H, W, nprototypes)
         yTy = tf.math.reduce_sum(self.prototypes**2, axis=[2])                                    # shape = (1, 1, nprototypes)
         norms = tf.nn.relu(xTx - 2*xTy + yTy)                                                     # shape = (batch_size, H, W, nprototypes)
-        similarity_scores = tf.math.log((norms + 1) / (norms + self.EPSILON))                     # shape = (batch_size, H, W, nprototypes)
-        similarity_scores = tf.math.multiply(similarity_scores, local_mask_factor)
         
-#         min_distances = tf.math.reduce_min(norms, axis=[1, 2])                                    # shape = (batch_size, nprototypes)       
-        min_distances = tf.math.reduce_min(norms / (local_mask_factor + self.EPSILON), axis=[1, 2])   # shape = (batch_size, nprototypes)           
-#         min_distances = tf.math.reduce_min(norms * local_mask_factor, axis=[1, 2])   # shape = 
-        
-#         l1 = tf.norm(self.local_mask, ord=1, name='l1_norm_local_mask')
-#         l1 = tf.norm(1. / (local_mask_factor + self.EPSILON), ord=1, name='l1_norm_local_mask')
-#         self.add_loss(tf.math.multiply(self.coeff_local_mask_l1, l1))
-#         self.add_metric(l1, 'l1_local_mask_cost')        
+        min_distances = tf.math.reduce_min(                                                       # shape = (batch_size, nprototypes)
+            norms / (local_scale_factor + self.EPSILON), 
+            axis=[1, 2]
+        )
 
         # Cluster cost
         inverted_cluster_cost = tf.math.reduce_max(                                               # shape = (batch_size,) 
-            (self.max_dist-min_distances)
-            *prototypes_of_correct_class, 
-            axis=-1)          
-        cluster_cost = tf.math.reduce_mean(self.max_dist-inverted_cluster_cost)                   # shape = (1,)
-        self.add_loss(self.coeff_cluster *cluster_cost)                                           # shape = (1,)
+            (self.max_dist - min_distances) * prototypes_of_correct_class, 
+            axis=-1
+        )          
+        cluster_cost = tf.math.reduce_mean(self.max_dist - inverted_cluster_cost)                 # shape = (1,)
+        self.add_loss(self.coeff_cluster * cluster_cost)                                          # shape = (1,)
         self.add_metric(cluster_cost, 'cluster_cost')
         
         # Separation cost
         prototypes_of_wrong_class = 1 - prototypes_of_correct_class
         inverted_separation_cost = tf.math.reduce_max(                                            # shape = (batch_size,)
-            (self.max_dist-min_distances)
-            *prototypes_of_wrong_class, 
-            axis=-1) 
-        separation_cost = tf.math.reduce_mean(self.max_dist-inverted_separation_cost)             # shape = (1,)
-        self.add_loss(self.coeff_separation*separation_cost)                                      # shape = (1,)
+            (self.max_dist - min_distances) * prototypes_of_wrong_class, 
+            axis=-1
+        ) 
+        separation_cost = tf.math.reduce_mean(self.max_dist - inverted_separation_cost)           # shape = (1,)
+        self.add_loss(self.coeff_separation * separation_cost)                                    # shape = (1,)
         self.add_metric(separation_cost, 'separation_cost')        
+
+        # Similarity scores
+        similarity_scores = tf.math.log((norms + 1) / (norms + self.EPSILON))                     # shape = (batch_size, H, W, nprototypes)
+        scaled_similarity_scores = tf.math.multiply(similarity_scores, local_scale_factor)        # shape = (batch_size, H, W, nprototypes)
         
-        
-        return tf.math.reduce_max(similarity_scores, axis=[1, 2], name="max_similarity_scores")
+        return tf.math.reduce_max(scaled_similarity_scores, axis=[1, 2], name="max_similarity_scores")
     
     
 def createClassIdentity(prototypes_per_class):
