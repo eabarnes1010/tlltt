@@ -5,7 +5,7 @@
 #*.pdf
 
 *.nc
-*.mat
+data_quadrants.mat
 *.bz2
 #*.csv
 *.h5
