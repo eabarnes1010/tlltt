@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 
 __author__ = "Randal J Barnes and Elizabeth A. Barnes"
-__version__ = "01 Decmeber 2021"
+__version__ = "02 Decmeber 2021"
 
 
 def get_model_prototype_layer(model):
@@ -52,7 +52,9 @@ class Prototype(tf.keras.layers.Layer):
         
         Arguments:
             inputs   tf.Tensor(shape = (batch_size, H, W, nchannels))
-            prototypes_of_correct_class    tf.Tensor(shape = (???, ???))
+            
+            prototypes_of_correct_class    tf.Tensor(shape = (batch_size, nprototypes))
+                ones and zeros only
             
         Returns:
             max_similarity_scores   tf.Tensor(shape = (batch_size, nprototypes))
@@ -75,19 +77,19 @@ class Prototype(tf.keras.layers.Layer):
            
         -- We have a "y" vector for each prototype.
             
-        -- The use of "relu" in the computation of norms eliminates problems brought on 
-           by very small rounding and truncation errors yielding negative norms.
+        -- The use of "relu" in the computation of normsq eliminates problems brought on 
+           by very small rounding and truncation errors yielding negative normsq.
         
         """
-        local_scale_factor = tf.math.exp(self.local_scale)                                        # shape = (H, W, nprototypes) ??
+        local_scale_factor = tf.math.exp(self.local_scale)                                        # shape = (H, W, nprototypes)
         
         xTx = tf.nn.conv2d(inputs**2, self.ONES,       strides=[1, 1, 1, 1], padding='VALID')     # shape = (batch_size, H, W, nprototypes)
         xTy = tf.nn.conv2d(inputs,    self.prototypes, strides=[1, 1, 1, 1], padding='VALID')     # shape = (batch_size, H, W, nprototypes)
         yTy = tf.math.reduce_sum(self.prototypes**2, axis=[2])                                    # shape = (1, 1, nprototypes)
-        norms = tf.nn.relu(xTx - 2*xTy + yTy)                                                     # shape = (batch_size, H, W, nprototypes)
+        normsq = tf.nn.relu(xTx - 2*xTy + yTy)                                                    # shape = (batch_size, H, W, nprototypes)
         
         min_distances = tf.math.reduce_min(                                                       # shape = (batch_size, nprototypes)
-            norms / (local_scale_factor + self.EPSILON), 
+            normsq / (local_scale_factor + self.EPSILON), 
             axis=[1, 2]
         )
 
@@ -111,7 +113,7 @@ class Prototype(tf.keras.layers.Layer):
         self.add_metric(separation_cost, 'separation_cost')        
 
         # Similarity scores
-        similarity_scores = tf.math.log((norms + 1) / (norms + self.EPSILON))                     # shape = (batch_size, H, W, nprototypes)
+        similarity_scores = tf.math.log((normsq + 1) / (normsq + self.EPSILON))                     # shape = (batch_size, H, W, nprototypes)
         scaled_similarity_scores = tf.math.multiply(similarity_scores, local_scale_factor)        # shape = (batch_size, H, W, nprototypes)
         
         return tf.math.reduce_max(scaled_similarity_scores, axis=[1, 2], name="max_similarity_scores")
