@@ -60,7 +60,7 @@ This work is a collaborative effort between [Dr. Elizabeth A. Barnes](https://si
 #### Funding sources
 This work was funded, in part, by the NSF AI Institute for Research on Trustworthy AI in Weather, Climate, and Coastal Oceanography ([AI2ES](https://www.ai2es.org/)).
 
-### References for the *"This Looks Like That"* ProtoLNet
+### References for the *"This Looks Like That There"* ProtoLNet
 * ADD PREPRINT HERE
 
 ### Fundamental references for this work
