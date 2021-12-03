@@ -50,8 +50,8 @@ def plot_sample(ax,image,globe=False, lat=None, lon=None, mapProj=None):
         
     else:
         p = ax.contourf(image,
-                      levels = np.arange(-10., 10.5, .5), 
-#                       levels = np.arange(-10., 10.25, .25),                         
+#                       levels = np.arange(-10., 10.5, .5), 
+                      levels = np.arange(-10., 10.25, .25),                         
                       cmap='cmr.fusion_r',                  
                      )
         p.set_clim(-10,10)
