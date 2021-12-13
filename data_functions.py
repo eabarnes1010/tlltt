@@ -129,7 +129,7 @@ def load_mjo_data(load_dir):
     rmm_amp  = xr.open_dataset(load_dir+filename)['RMM_amp']
     rmm_ph   = xr.open_dataset(load_dir+filename)['RMM_ph']
     
-    i = np.where(rmm_amp<.5)
+    i = np.where(rmm_amp<.5) # RMM amplitudes less than 0.5 are labeled as "phase 0"
     rmm_ph[i] = 0
 
     print(np.unique(rmm_ph))    
