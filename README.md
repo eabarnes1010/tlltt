@@ -2,6 +2,8 @@
 ***
 An interpretable neural network (ProtoLNet) based on training prototypes is extended from that developed by Chen et al. (2019) to consider absolute location. The network's decision making process is interpreted via looking at which patches of the input image look like specific prototypes (i.e. *this looks like that there*). The interpretability of the prototype architecture is demonstrated via applications to 2-dimensional geophysical fields.
 
+This work has been accepted for publication in [The Journal of Advances in Modeling Earth Systems (JAMES)](https://agupubs.onlinelibrary.wiley.com/journal/19422466). 
+
 
 ## Tensorflow Code
 ***
@@ -58,10 +60,7 @@ The following python environment was used to implement this code.
 This work is a collaborative effort between [Dr. Elizabeth A. Barnes](https://sites.google.com/rams.colostate.edu/barnesresearchgroup/home) and [Dr. Randal J. Barnes](https://cse.umn.edu/cege/randal-j-barnes). In addition, [Dr. Zane Martin](https://www.zanekmartin.com/) and [Jamin Rader](https://jaminrader.wordpress.com) contributed to the two use cases and the writing of the scientific article. The ProtoPNet of Chen et al. (2019) is the backbone of this work.
 
 #### Funding sources
-This work was funded, in part, by the NSF AI Institute for Research on Trustworthy AI in Weather, Climate, and Coastal Oceanography ([AI2ES](https://www.ai2es.org/)).
-
-### References for the *"This Looks Like That There"* ProtoLNet
-* ADD PREPRINT HERE
+This work was funded, in part, by the NSF AI Institute for Research on Trustworthy AI in Weather, Climate, and Coastal Oceanography ([AI2ES](https://www.ai2es.org/)) under NSF grant ICER-596 2019758. ZKM recognizes support from the National Science Foundation under Award No. 2020305. JKR recognizes support from the U.S. Department of Energy, Office of Science, Office of Advanced Scientific Computing Research, Department of Energy Computational Science Graduate Fellowship under Award No. DE-SC0020347.
 
 ### Fundamental references for this work
 * Chen, Chaofan, Oscar Li, Daniel Tao, Alina Barnett, Cynthia Rudin, and Jonathan K. Su. 2019. “This Looks Like That: Deep Learning for Interpretable Image Recognition.” In Advances in Neural Information Processing Systems, edited by H. Wallach, H. Larochelle, A. Beygelzimer, F. Alché-Buc, E. Fox, and R. Garnett. Vol. 32. Curran Associates, Inc. https://proceedings.neurips.cc/paper/2019/file/adf7ee2dcf142b0e11888e72b43fcb75-Paper.pdf
